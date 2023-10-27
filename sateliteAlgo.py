@@ -1,4 +1,5 @@
 import math
+import os
 from datetime import datetime, date, timedelta
 import spacetrack.operators as op
 from spacetrack import SpaceTrackClient
@@ -9,12 +10,12 @@ graviConst = 6.67 * 10 ** -11
 earthRadius = 6.378 * 10 ** 6
 
 
-def calcSateliteSpeed(sateliteHeight):
-    return (graviConst * earthWeight / (earthRadius + sateliteHeight))
+def calcSatelliteSpeed(satelliteHeight):
+    return (graviConst * earthWeight / (earthRadius + satelliteHeight))
 
 
-def calcSatelitePeriod(sateliteHeight):
-    return (2 * math.pi * (earthRadius + sateliteHeight) / calcSateliteSpeed(sateliteHeight))
+def calcSatellitePeriod(satelliteHeight):
+    return (2 * math.pi * (earthRadius + satelliteHeight) / calcSatelliteSpeed(satelliteHeight))
 
 
 def fromGeodetToGeocent(LBHlist):
@@ -65,8 +66,8 @@ def get_spacetrack_tle(sat_id, start_date, end_date, username, password, latest=
     return tle_1, tle_2
 
 
-USERNAME = "vladimirga1511@gmail.com"
-PASSWORD = "4456Vektor654456"
+USERNAME = os.environ.get('USER_NAME')
+PASSWORD = os.environ.get('PASSWORD')
 
 
 def calcGeodeticDist(p1, p2):
@@ -92,8 +93,7 @@ def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
     satTrack = [[], []]
     tle_1, tle_2 = get_spacetrack_tle(sat_id, date.today() - timedelta(days=1), date.today(), USERNAME, PASSWORD, False)
     if not tle_1 or not tle_2:
-        print
-        'Impossible to retrieve TLE'
+        print('Impossible to retrieve TLE')
         return
 
     midLon = (location[0][0] + location[1][0]) / 2
