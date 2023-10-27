@@ -4,6 +4,8 @@ from datetime import datetime, date, timedelta
 import spacetrack.operators as op
 from spacetrack import SpaceTrackClient
 from pyorbital.orbital import Orbital
+from typing import List
+from math import pi, cos, radians
 
 earthWeight = 5.97 * 10 ** 24
 graviConst = 6.67 * 10 ** -11
@@ -88,7 +90,7 @@ def checkCover(location, satPos, mainStripWidth):
         return None
 
 
-def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
+def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location) -> List:
     result = [0, 0]
     satTrack = [[], []]
     tle_1, tle_2 = get_spacetrack_tle(sat_id, date.today() - timedelta(days=1), date.today(), USERNAME, PASSWORD, False)
@@ -142,3 +144,20 @@ def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
     result[0] = satTrack
     result[1] = requiredTime
     return result
+
+
+def reproject(latitude, longitude):
+    earth_radius = 6371009  # in meters
+    lat_dist = pi * earth_radius / 180.0
+
+    y = [lat * lat_dist for lat in latitude]
+    x = [long * lat_dist * cos(radians(lat))
+         for lat, long in zip(latitude, longitude)]
+    return x, y
+
+
+def area_of_polygon(x, y):
+    area = 0.0
+    for i in range(-1, len(x) - 1):
+        area += x[i] * (y[i + 1] - y[i - 1])
+    return abs(area) / 2.0

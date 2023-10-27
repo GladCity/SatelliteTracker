@@ -8,12 +8,25 @@ app = Flask(__name__)
 
 @app.route('/check-area', methods=['POST'])
 def check_area():
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
-        jsons = request.json
-        return jsons
-    else:
-        return 'Content-Type not supported!'
+    jsons = json.loads(request.json)
+    min_l = [1000., 0]
+    max_l = [-1000., 0]
+    latitude = []
+    longitude = []
+    for i in jsons:
+        if min_l[0] > i[0]:
+            min_l = i
+        if max_l[0] < i[0]:
+            max_l = i
+    db = DataBase()
+    satellites = db.get_satellites()
+    out = []
+    for i in satellites:
+        res = sateliteAlgo.calcRequiredTimeAndSatTrack(i.norad_id, i.photo_size, [min_l, max_l])
+        if res[0] is None:
+            continue
+        out.append(res)
+    return json.dumps(out)
 
 
 @app.route('/get-satellite', methods=['POST'])
@@ -25,15 +38,6 @@ def get_satellite():
         out.append(i.__dict__)
     return json.dumps(out)
 
-
-@app.route('/test', methods=['POST'])
-def test():
-    return json.dumps({"tema": "gay"})
-
-
-@app.route('/test2', methods=['POST'])
-def test2():
-    return json.dumps({"tema2": "gay2"})
 
 
 if __name__ == '__main__':

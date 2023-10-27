@@ -19,11 +19,11 @@ class DataBase(object):
         self.__cursor.execute("SELECT * FROM satellite")
         out = []
         for row in self.__cursor:
-            out.append(Satellite(row[0], row[1], row[2], row[3], row[4]))
+            out.append(Satellite(row[0], row[1], row[2], row[3], row[4], row[5]))
         return out
 
     def add_satellite(self, satellite: Satellite):
         self.__cursor.execute(
-            f"""INSERT INTO satellite(name, norad_id, details, photo_size)
-        VALUES('{satellite.name}', '{satellite.norad_id}', {satellite.details}, {satellite.photo_size});""")
+            f"""INSERT INTO satellite(name, norad_id, details, photo_size, price)
+        VALUES('{satellite.name}', {satellite.norad_id}, {satellite.details}, {satellite.photo_size}, {satellite.price});""")
         self.__conn.commit()
