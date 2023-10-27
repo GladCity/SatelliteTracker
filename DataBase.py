@@ -1,5 +1,7 @@
 import psycopg2
 import os
+from satellite import Satellite
+from typing import List
 
 
 class DataBase(object):
@@ -13,8 +15,10 @@ class DataBase(object):
             cls.instance = super(DataBase, cls).__new__(cls)
         return cls.instance
 
+    def get_satellite(self) -> List[Satellite]:
+        self.__cursor.execute("SELECT * FROM satellite")
+        out = []
+        for row in self.__cursor:
+            out.append(Satellite(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]))
+        return out
 
-
-
-if __name__ == "__main__":
-    db = DataBase()
