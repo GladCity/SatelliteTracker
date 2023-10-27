@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpx_style="http://www.topografix.com/GPX/gpx_style/0/2" version="1.1" creator="https://gpx.studio">
+  <metadata>
+    <name>new</name>
+  </metadata>
+  <trk>
+    <name>new</name>
+    <type>Running</type>
+    <trkseg>
+      <trkpt lat="62.59334083012024" lon="45">
+        <ele>174.8</ele>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

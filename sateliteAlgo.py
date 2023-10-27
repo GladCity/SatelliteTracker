@@ -3,6 +3,9 @@ from datetime import datetime, date, timedelta
 import spacetrack.operators as op
 from spacetrack import SpaceTrackClient
 from pyorbital.orbital import Orbital
+from gpx import GPX
+from gpx import Waypoint
+from gpx import TrackSegment, Track
 
 earthWeight = 5.97 * 10 ** 24
 graviConst = 6.67 * 10 ** -11
@@ -101,7 +104,7 @@ def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
     curPeriod = 24 * 60 / float(tle_2[52:63])
     i = 0
     minutes = datetime.now().time().hour * 60 + datetime.now().time().minute
-    timeStep = 5
+    timeStep = 2
     requiredTime = 0
     coveredFlag = False
     while minutes < requiredTime or not coveredFlag:
@@ -138,5 +141,17 @@ def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
             return result
     result[0] = satTrack
     result[1] = requiredTime
+    gpx = GPX.from_file("track.gpx")
+    trs = TrackSegment()
+    for i in range(0, len(satTrack[0])):
+        wpt = Waypoint()
+        wpt.lon = satTrack[0][i]
+        wpt.lat = satTrack[1][i]
+        trs.trkpts.append(wpt)
+    trp = Track()
+    trp.trksegs.append(trs)
+    gpx.tracks = []
+    gpx.tracks.append(trp)
+    gpx.to_file("track.gpx")
     return result
 
