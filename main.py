@@ -14,18 +14,22 @@ def check_area():
     latitude = []
     longitude = []
     for i in jsons:
+        longitude.append(i[0])
+        latitude.append(i[1])
         if min_l[0] > i[0]:
             min_l = i
         if max_l[0] < i[0]:
             max_l = i
+    x, y = sateliteAlgo.reproject(latitude, longitude)
+    area = sateliteAlgo.area_of_polygon(x, y)
     db = DataBase()
     satellites = db.get_satellites()
-    out = []
+    out = {}
     for i in satellites:
         res = sateliteAlgo.calcRequiredTimeAndSatTrack(i.norad_id, i.photo_size, [min_l, max_l])
         if res[0] is None:
             continue
-        out.append(res)
+        out[i.name] = {"track": res[0], "time": res[1], "price": area * i.price, "resolution": i.details}
     return json.dumps(out)
 
 
