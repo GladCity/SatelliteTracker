@@ -68,11 +68,13 @@ def get_spacetrack_tle(sat_id, start_date, end_date, username, password, latest=
 USERNAME = "vladimirga1511@gmail.com"
 PASSWORD = "4456Vektor654456"
 
+
 def calcGeodeticDist(p1, p2):
     fm = (p1[0] + p2[0]) / 2 * math.pi / 180
     k1 = 111.13209 - 0.56605 * math.cos(2 * fm) + 0.0012 * math.cos(4 * fm)
     k2 = 111.41513 * math.cos(fm) - 0.09455 * math.cos(3 * fm) + 0.00012 * math.cos(5 * fm)
     return ((k1 * (p1[0] - p2[0])) ** 2 + (k2 * (p1[1] - p2[1])) ** 2) ** 0.5
+
 
 def checkCover(location, satPos, mainStripWidth):
     d1 = calcGeodeticDist(location[0], satPos)
@@ -120,8 +122,9 @@ def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
                     utc_hour1 = int(minutes // 60 % 24)
                     utc_minutes1 = int((minutes - (utc_hour1 * 60) + curPeriod) // 1) % 60
                     utc_seconds1 = int(round((minutes - (utc_hour1 * 60) - utc_minutes1) * 60)) % 60
-                    utc_time1 = datetime(date.today().year, date.today().month, date.today().day, utc_hour1, utc_minutes1,
-                                        utc_seconds1)
+                    utc_time1 = datetime(date.today().year, date.today().month, date.today().day, utc_hour1,
+                                         utc_minutes1,
+                                         utc_seconds1)
                     lon1, lat1, alt1 = orb.get_lonlatalt(utc_time1)
                     satPeriodicalOffset = calcGeodeticDist([lon1, lat], [lon, lat])
                     requoredAmountOfRoundate = uncovered // satPeriodicalOffset + 1
@@ -139,4 +142,3 @@ def calcRequiredTimeAndSatTrack(sat_id, cameraViewStrip, location):
     result[0] = satTrack
     result[1] = requiredTime
     return result
-

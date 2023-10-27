@@ -1,2 +1,4 @@
 flask~=3.0.0
 psycopg2-binary~=2.9.9
+spacetrack~=1.1.0
+pyorbital~=1.8.0
