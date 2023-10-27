@@ -15,7 +15,7 @@ class DataBase(object):
             cls.instance = super(DataBase, cls).__new__(cls)
         return cls.instance
 
-    def get_satellite(self) -> List[Satellite]:
+    def get_satellites(self) -> List[Satellite]:
         self.__cursor.execute("SELECT * FROM satellite")
         out = []
         for row in self.__cursor:
@@ -24,6 +24,6 @@ class DataBase(object):
 
     def add_satellite(self, satellite: Satellite):
         self.__cursor.execute(
-            f"""INSERT INTO satellite(name, tle, detalis, photo_size)
-        VALUES('{satellite.name}', '{satellite.tle}', {satellite.detalis}, {satellite.photo_size});""")
+            f"""INSERT INTO satellite(name, norad_id, details, photo_size)
+        VALUES('{satellite.name}', '{satellite.norad_id}', {satellite.details}, {satellite.photo_size});""")
         self.__conn.commit()
